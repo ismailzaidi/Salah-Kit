@@ -1,4 +1,4 @@
-package salahnotify.zdmedia.com.salahnotify;
+package com.zdmedia.salahnotify;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
