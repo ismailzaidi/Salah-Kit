@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-
     app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="1dp"
     app:cardElevation="2dp"
     app:contentPadding="3dp"
     tools:showIn="@layout/content_main">
-
+    <com.andexert.library.RippleView
+        android:id="@+id/more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:rv_centered="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,18 +35,18 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/ar_prayer_1"
                 android:textColor="@android:color/white"
-                android:textSize="30dp" />
+                android:textSize="24dp" />
 
             <TextView
                 android:id="@+id/englishTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/en_prayer_1"
                 android:textColor="@android:color/white"
-                android:textSize="30dp" />
+                android:textSize="24dp" />
 
         </LinearLayout>
 
@@ -57,8 +60,8 @@
             android:fontFamily="sans-serif-medium"
             android:text="12:00pm"
             android:textColor="@android:color/white"
-            android:textSize="28dp" />
+            android:textSize="24dp" />
     </LinearLayout>
-
+    </com.andexert.library.RippleView>
 
 </com.zdmedia.salahnotify.PrayerView>
