@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zdmedia.salahnotify.PrayerView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+
+    app:cardBackgroundColor="@color/colorPrimary"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="2dp"
+    app:contentPadding="3dp"
+    tools:showIn="@layout/content_main">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/arabicTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/ar_prayer_1"
+                android:textColor="@android:color/white"
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/englishTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/en_prayer_1"
+                android:textColor="@android:color/white"
+                android:textSize="30dp" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="right"
+            android:fontFamily="sans-serif-medium"
+            android:text="12:00pm"
+            android:textColor="@android:color/white"
+            android:textSize="28dp" />
+    </LinearLayout>
+
+
+</com.zdmedia.salahnotify.PrayerView>
