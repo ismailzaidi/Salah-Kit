@@ -1,9 +1,12 @@
-package com.zdmedia.salahnotify;
+package com.zdmedia.salahnotify.CustomViews;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.zdmedia.salahnotify.R;
+import com.zdmedia.salahnotify.model.Prayer;
 
 /**
  * Created by Ismail on 13/06/2016.
@@ -25,12 +28,12 @@ public class PrayerView  extends CardView{
         super.onFinishInflate();
         arabicTxtView = (TextView) findViewById(R.id.arabicTextView);
         englishTxtView = (TextView) findViewById(R.id.englishTextView);
-        timeTxtView = (TextView) findViewById(R.id.arabicTextView);
+        timeTxtView = (TextView) findViewById(R.id.timeTextView);
     }
 
-    public void updateItem(String arabicText,String englishText,String timeText){
-        arabicTxtView.setText(arabicText);
-        englishTxtView.setText(englishText);
-        timeTxtView.setText(timeText);
+    public void updateItem(Prayer prayer){
+        arabicTxtView.setText(prayer.getArabicPrayer());
+        englishTxtView.setText(prayer.getEnglishPrayer());
+        timeTxtView.setText(prayer.getPrayerTime());
     }
 }

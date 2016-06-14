@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zdmedia.salahnotify.PrayerView xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.zdmedia.salahnotify.CustomViews.PrayerView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginBottom="3dp"
     app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="1dp"
     app:cardElevation="2dp"
-    app:contentPadding="3dp"
-    tools:showIn="@layout/content_main">
+    app:contentPadding="3dp">
     <com.andexert.library.RippleView
         android:id="@+id/more"
         android:layout_width="wrap_content"
@@ -64,4 +64,4 @@
     </LinearLayout>
     </com.andexert.library.RippleView>
 
-</com.zdmedia.salahnotify.PrayerView>
+</com.zdmedia.salahnotify.CustomViews.PrayerView>
