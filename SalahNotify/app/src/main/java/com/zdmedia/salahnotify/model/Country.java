@@ -5,6 +5,9 @@ package com.zdmedia.salahnotify.model;
  */
 public class Country {
     private String cityName,countryName, countryISOCode;
+
+
+
     private double latitude, longtitude;
     public Country(String cityName, String countryName, String countryISOCode, double latitude, double longtitude) {
         this.cityName = cityName;
@@ -53,5 +56,8 @@ public class Country {
         this.longtitude = longtitude;
     }
 
-
+    @Override
+    public String toString() {
+        return cityName +" ," + countryName +" ," + countryISOCode;
+    }
 }

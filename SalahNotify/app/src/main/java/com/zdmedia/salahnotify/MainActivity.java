@@ -13,11 +13,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zdmedia.salahnotify.CustomViews.DividerDecoration;
@@ -28,7 +30,7 @@ import com.zdmedia.salahnotify.model.Prayer;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LocationListener,HTTPHandler.CountryFetcher,HTTPHandler.PrayerFetcher {
+public class MainActivity extends AppCompatActivity implements LocationListener, HTTPHandler.CountryFetcher, HTTPHandler.PrayerFetcher {
     public static final String GPS_CONFIG = "GPS_CONFIG";
     private LocationManager mManger;
     private static final String[] GPS_PERMS = {
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private int GPS_REQUEST_CODE = 1234;
     private HTTPHandler handler;
     private RecyclerView prayerRecyclerView;
+    private ImageView settings_icon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +48,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         prayerRecyclerView = (RecyclerView) findViewById(R.id.prayerRecyclerView);
-        prayerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        prayerRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
         prayerRecyclerView.setHasFixedSize(true);
         prayerRecyclerView.addItemDecoration(new DividerDecoration(5));
+        settings_icon = (ImageView) findViewById(R.id.settings_icon);
+        settings_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SettingsPreferenceActivity.class);
+                startActivity(intent);
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         mManger = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setupGPSPermissions();
     }
-
 
     private void setupGPSPermissions() {
         boolean isEnabled = mManger.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -75,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 } else {
                     ActivityCompat.requestPermissions(this, MainActivity.GPS_PERMS, GPS_REQUEST_CODE);
                 }
-
                 return;
             } else {
                 Location location = mManger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -87,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 double longtitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 Log.v(GPS_CONFIG, "Longtitude: " + longtitude + " Latitude: " + latitude);
-                getLocationString(latitude,longtitude);
+                getLocationString(latitude, longtitude);
             }
         } else {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -95,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    public void getLocationString(double latitude, double longtitude){
+    public void getLocationString(double latitude, double longtitude) {
         handler = new HTTPHandler(this);
         handler.countryHandler(latitude, longtitude);
         handler.setupCountryCallback(this);
@@ -143,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         handler.setupPrayerCallback(this);
 
     }
+
     @Override
     public void getPrayerList(ArrayList<Prayer> listOfPrayers) {
         RecyclerPrayerAdapter adapter = new RecyclerPrayerAdapter(listOfPrayers);

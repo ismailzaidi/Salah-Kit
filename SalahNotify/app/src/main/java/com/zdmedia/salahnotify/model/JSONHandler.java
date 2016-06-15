@@ -33,6 +33,7 @@ public class JSONHandler {
             JSONArray resultsArray = jsonObject.getJSONArray("items");
             JSONObject firstItem = resultsArray.getJSONObject(0);
             listOfPrayers.add(new Prayer(resources.getString(R.string.en_prayer_1),resources.getString(R.string.ar_prayer_1),firstItem.getString("fajr")));
+            listOfPrayers.add(new Prayer(resources.getString(R.string.en_prayer_6),resources.getString(R.string.ar_prayer_6),firstItem.getString("shurooq")));
             listOfPrayers.add(new Prayer(resources.getString(R.string.en_prayer_2),resources.getString(R.string.ar_prayer_2),firstItem.getString("dhuhr")));
             listOfPrayers.add(new Prayer(resources.getString(R.string.en_prayer_3),resources.getString(R.string.ar_prayer_3),firstItem.getString("asr")));
             listOfPrayers.add(new Prayer(resources.getString(R.string.en_prayer_4),resources.getString(R.string.ar_prayer_4),firstItem.getString("maghrib")));

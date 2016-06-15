@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zdmedia.salahnotify.CustomViews.PrayerView xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zdmedia.salahnotify.CustomViews.PrayerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,22 +10,20 @@
     app:cardCornerRadius="1dp"
     app:cardElevation="2dp"
     app:contentPadding="3dp">
+
     <com.andexert.library.RippleView
         android:id="@+id/more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:rv_centered="true">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:padding="10dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
 
             <TextView
                 android:id="@+id/arabicTextView"
@@ -48,20 +46,17 @@
                 android:textColor="@android:color/white"
                 android:textSize="24dp" />
 
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="12:00pm"
+                android:textColor="@android:color/white"
+                android:textSize="24dp" />
         </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/timeTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="right"
-            android:fontFamily="sans-serif-medium"
-            android:text="12:00pm"
-            android:textColor="@android:color/white"
-            android:textSize="24dp" />
-    </LinearLayout>
     </com.andexert.library.RippleView>
 
 </com.zdmedia.salahnotify.CustomViews.PrayerView>
