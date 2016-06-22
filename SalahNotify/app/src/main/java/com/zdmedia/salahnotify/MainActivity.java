@@ -12,6 +12,8 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,14 +25,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zdmedia.salahnotify.CustomViews.DividerDecoration;
+import com.zdmedia.salahnotify.Fragments.PrayerFragment;
+import com.zdmedia.salahnotify.Fragments.RecitorFragment;
 import com.zdmedia.salahnotify.adapters.RecyclerPrayerAdapter;
 import com.zdmedia.salahnotify.model.Country;
 import com.zdmedia.salahnotify.model.HTTPHandler;
 import com.zdmedia.salahnotify.model.Prayer;
+import com.zdmedia.salahnotify.model.Utility;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LocationListener, HTTPHandler.CountryFetcher, HTTPHandler.PrayerFetcher {
+public class MainActivity extends AppCompatActivity implements  HTTPHandler.CountryFetcher, HTTPHandler.PrayerFetcher {
     public static final String GPS_CONFIG = "GPS_CONFIG";
     private LocationManager mManger;
     private static final String[] GPS_PERMS = {
@@ -38,19 +43,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     };
     private int GPS_REQUEST_CODE = 1234;
     private HTTPHandler handler;
-    private RecyclerView prayerRecyclerView;
     private ImageView settings_icon;
-
+    private ArrayList<Prayer> listOfPrayers;
+    private Utility utility;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        prayerRecyclerView = (RecyclerView) findViewById(R.id.prayerRecyclerView);
-        prayerRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
-        prayerRecyclerView.setHasFixedSize(true);
-        prayerRecyclerView.addItemDecoration(new DividerDecoration(5));
         settings_icon = (ImageView) findViewById(R.id.settings_icon);
         settings_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,51 +69,39 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         });
         mManger = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        utility = new Utility(this);
         setupGPSPermissions();
+        displayFragment(0);
     }
 
-    private void setupGPSPermissions() {
-        boolean isEnabled = mManger.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (isEnabled) {
-            boolean ACCESS_LOC = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED;
-            boolean COARSE_LOC = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
-            Log.v(GPS_CONFIG, "Access Fine Location Permission: " + ACCESS_LOC + " Access Coarse Location " + COARSE_LOC);
-            if (ACCESS_LOC && COARSE_LOC) {
-
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                    ActivityCompat.requestPermissions(this, MainActivity.GPS_PERMS, GPS_REQUEST_CODE);
-
-                } else {
-                    ActivityCompat.requestPermissions(this, MainActivity.GPS_PERMS, GPS_REQUEST_CODE);
-                }
-                return;
-            } else {
-                Location location = mManger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (location == null) {
-                    mManger.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                    location = mManger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                }
-                Log.v(GPS_CONFIG, " Location: " + location);
-                double longtitude = location.getLongitude();
-                double latitude = location.getLatitude();
-                Log.v(GPS_CONFIG, "Longtitude: " + longtitude + " Latitude: " + latitude);
-                getLocationString(latitude, longtitude);
-            }
-        } else {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
+    private void displayFragment(int position) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = PrayerFragment.InstanceOf(listOfPrayers);
+                break;
+            case 1:
+                fragment = RecitorFragment.InstanceOf();
+                break;
         }
-    }
+        if(fragment !=null){
+            fragmentManager.beginTransaction().replace(R.id.frame_content, fragment,fragment.getTag()).commit();
+        }
 
-    public void getLocationString(double latitude, double longtitude) {
+    }
+    private void setupGPSPermissions() {
+        utility.setActivityForPermissions(this);
+        double latitude = utility.getLatitude();
+        double longtitude = utility.getLongtitude();
+        fetchUserLocation(latitude,longtitude);
+    }
+    public void fetchUserLocation(double latitude, double longtitude) {
         handler = new HTTPHandler(this);
         handler.countryHandler(latitude, longtitude);
         handler.setupCountryCallback(this);
 
     }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -127,37 +116,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
     public void getUserCountry(Country country) {
         Toast.makeText(this, country.getCountryName(), Toast.LENGTH_SHORT).show();
         handler.prayerHandler(country);
         handler.setupPrayerCallback(this);
-
     }
 
     @Override
     public void getPrayerList(ArrayList<Prayer> listOfPrayers) {
-        RecyclerPrayerAdapter adapter = new RecyclerPrayerAdapter(listOfPrayers);
-        prayerRecyclerView.setAdapter(adapter);
+        this.listOfPrayers = listOfPrayers;
         Toast.makeText(this, "How Many Prayers are there: " + listOfPrayers.size(), Toast.LENGTH_SHORT).show();
     }
 }
